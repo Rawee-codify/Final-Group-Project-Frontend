@@ -16,6 +16,7 @@ dependencies:
   firebase_storage: 11.7.7
   flutter:
     sdk: flutter
+  flutter_dotenv: ^5.2.1
   flutter_iconpicker: ^4.0.1
   flutter_launcher_icons: ^0.14.1
   flutter_local_notifications: ^17.2.3
@@ -44,3 +45,8 @@ flutter:
     - assets/assets/user_02.png
     - assets/assets/onboarding4.png
     - assets/assets/onboarding11.png
+    - lib/config/.env
+    - assets/assets/background_1.jpg
+    - assets/assets/background_3.webp
+    - assets/assets/background_4.webp
+

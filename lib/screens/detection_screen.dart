@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:io';
+
+import 'guide_lines_screen.dart'; // Ensure this import points to the correct path
 
 class PredictionScreen extends StatefulWidget {
   @override
@@ -13,12 +16,26 @@ class _PredictionScreenState extends State<PredictionScreen> {
   File? _image;
   String? _prediction;
   bool _isLoading = false;
+  String? mlIP = dotenv.env['MLIP']?.isEmpty ?? true
+      ? dotenv.env['DEFAULT_IP']
+      : dotenv.env['MLIP'];
 
   Future<void> _getPrediction() async {
-    if (_image == null) return;
+    if (_image == null) {
+      // Show error message if no image is selected
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Please select an image"),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
 
+    // Prepare HTTP request
     var request = http.MultipartRequest(
-      'POST', Uri.parse("http://10.11.5.30:8080/predict"),
+      'POST',
+      Uri.parse("http://$mlIP:8080/predict"),
     );
     request.files.add(await http.MultipartFile.fromPath('file', _image!.path));
 
@@ -31,12 +48,14 @@ class _PredictionScreenState extends State<PredictionScreen> {
 
         try {
           var result = jsonDecode(responseData);
-          setState(() => _prediction = "Prediction: ${result['prediction']}");
+          setState(() => _prediction =
+              "Class: ${result['predicted_class']}, Confidence: ${result['confidence']}");
         } catch (jsonError) {
           setState(() => _prediction = "Error: Unable to parse prediction");
         }
       } else {
-        setState(() => _prediction = "Prediction failed with status ${response.statusCode}");
+        setState(() => _prediction =
+            "Prediction failed with status ${response.statusCode}");
       }
     } catch (e) {
       setState(() => _prediction = "Error: $e");
@@ -45,8 +64,17 @@ class _PredictionScreenState extends State<PredictionScreen> {
     }
   }
 
-  Future<void> _pickImage() async {
-    final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+  Future<void> _pickImageFromGallery() async {
+    final pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() => _image = File(pickedFile.path));
+    }
+  }
+
+  Future<void> _captureImageWithCamera() async {
+    final pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.camera);
     if (pickedFile != null) {
       setState(() => _image = File(pickedFile.path));
     }
@@ -55,24 +83,12 @@ class _PredictionScreenState extends State<PredictionScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-       backgroundColor: Color.fromARGB(255, 11, 32, 11),
-      appBar: AppBar(
-        title: Text("New Prediction",
-        style: TextStyle(
-            color:  Color.fromARGB(255, 9, 44, 11),
-            fontSize: 23,
-          ),
-        
-        ),
-
-        centerTitle: true,
-        backgroundColor: Color.fromARGB(255, 222, 228, 223),
-      ),
-      body: Center( // Center widget to vertically center everything
+      backgroundColor: const Color.fromARGB(255, 11, 32, 11),
+      body: Center(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
           child: Column(
-            mainAxisSize: MainAxisSize.min, // Centers contents without stretching
+            mainAxisSize: MainAxisSize.min,
             children: [
               if (_image == null)
                 Container(
@@ -99,48 +115,90 @@ class _PredictionScreenState extends State<PredictionScreen> {
                     fit: BoxFit.cover,
                   ),
                 ),
-              SizedBox(height: 20),
+              const SizedBox(height: 10),
               ElevatedButton.icon(
-                onPressed: _pickImage,
-                icon: Icon(Icons.image),
-                label: Text("Select Image"),
+                onPressed: _captureImageWithCamera,
+                icon: const Icon(Icons.camera_alt),
+                label: const Text("Camera"),
                 style: ElevatedButton.styleFrom(
-                  foregroundColor: Color.fromARGB(255, 9, 44, 11), backgroundColor: const Color.fromARGB(255, 248, 249, 249),
-                  padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                  foregroundColor: const Color.fromARGB(255, 9, 44, 11),
+                  backgroundColor: const Color.fromARGB(255, 248, 249, 249),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 20),
+              ElevatedButton.icon(
+                onPressed: _pickImageFromGallery,
+                icon: const Icon(Icons.image),
+                label: const Text("Gallery"),
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: const Color.fromARGB(255, 9, 44, 11),
+                  backgroundColor: const Color.fromARGB(255, 248, 249, 249),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 10),
               ElevatedButton.icon(
                 onPressed: _getPrediction,
-                icon: Icon(Icons.search),
-                label: Text("Get Prediction"),
+                icon: const Icon(Icons.search),
+                label: const Text("Get Prediction"),
                 style: ElevatedButton.styleFrom(
-                  foregroundColor: Colors.white, backgroundColor: Color.fromARGB(255, 11, 68, 5),
-                  padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                  foregroundColor: Colors.white,
+                  backgroundColor: const Color.fromARGB(255, 11, 68, 5),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               if (_isLoading)
-                CircularProgressIndicator()
+                const CircularProgressIndicator()
               else if (_prediction != null)
                 Container(
-                  padding: EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
                     color: Colors.teal[50],
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Text(
                     _prediction!,
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.bold),
                     textAlign: TextAlign.center,
                   ),
                 ),
+              const Spacer(),
+              // Place the Guidelines button at the bottom
+              ElevatedButton.icon(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => GuideLinesScreen()),
+                  );
+                },
+                icon: const Icon(Icons.info),
+                label: const Text("Guidelines"),
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  backgroundColor: Colors.blueGrey,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+              ),
             ],
           ),
         ),

@@ -17,16 +17,6 @@ class _CommunityScreenState extends State<CommunityScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 11, 32, 11),
-      appBar: AppBar(
-        title: Text(
-          'Community',
-          style: TextStyle(
-            color:  Color.fromARGB(255, 9, 44, 11),
-            fontSize: 23,
-          ),
-        ),
-        backgroundColor: Color.fromARGB(255, 222, 228, 223),
-      ),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance
             .collection('community_posts')
@@ -55,7 +45,9 @@ class _CommunityScreenState extends State<CommunityScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
-              context, MaterialPageRoute(builder: (context) => const CreatePostScreen()));
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const CreatePostScreen()));
         },
         backgroundColor: const Color.fromARGB(255, 150, 158, 150),
         child: const Icon(Icons.add),
@@ -154,7 +146,8 @@ class _CommunityScreenState extends State<CommunityScreen> {
               style: const TextStyle(fontSize: 14, color: Colors.black87),
             ),
           ),
-          _buildLikeDislikeSection(post.id, postData), // Like and dislike section
+          _buildLikeDislikeSection(
+              post.id, postData), // Like and dislike section
           const SizedBox(height: 10),
           _buildCommentsSection(post.id, postData),
         ],
@@ -163,7 +156,8 @@ class _CommunityScreenState extends State<CommunityScreen> {
   }
 
   // Like and Dislike section
-  Widget _buildLikeDislikeSection(String postId, Map<String, dynamic> postData) {
+  Widget _buildLikeDislikeSection(
+      String postId, Map<String, dynamic> postData) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10.0),
       child: Row(
@@ -174,14 +168,16 @@ class _CommunityScreenState extends State<CommunityScreen> {
               _updateLikes(postId, postData['likes'] ?? 0);
             },
           ),
-          Text('${postData['likes'] ?? 0}', style: const TextStyle(color: Colors.black87)),
+          Text('${postData['likes'] ?? 0}',
+              style: const TextStyle(color: Colors.black87)),
           IconButton(
             icon: const Icon(Icons.thumb_down_alt_outlined, color: Colors.red),
             onPressed: () {
               _updateDislikes(postId, postData['dislikes'] ?? 0);
             },
           ),
-          Text('${postData['dislikes'] ?? 0}', style: const TextStyle(color: Colors.black87)),
+          Text('${postData['dislikes'] ?? 0}',
+              style: const TextStyle(color: Colors.black87)),
         ],
       ),
     );
@@ -189,14 +185,20 @@ class _CommunityScreenState extends State<CommunityScreen> {
 
   // Update likes in Firestore
   Future<void> _updateLikes(String postId, int currentLikes) async {
-    await FirebaseFirestore.instance.collection('community_posts').doc(postId).update({
+    await FirebaseFirestore.instance
+        .collection('community_posts')
+        .doc(postId)
+        .update({
       'likes': currentLikes + 1,
     });
   }
 
   // Update dislikes in Firestore
   Future<void> _updateDislikes(String postId, int currentDislikes) async {
-    await FirebaseFirestore.instance.collection('community_posts').doc(postId).update({
+    await FirebaseFirestore.instance
+        .collection('community_posts')
+        .doc(postId)
+        .update({
       'dislikes': currentDislikes + 1,
     });
   }
@@ -251,7 +253,10 @@ class _CommunityScreenState extends State<CommunityScreen> {
 
   // Delete post from Firestore
   Future<void> _deletePost(String postId) async {
-    await FirebaseFirestore.instance.collection('community_posts').doc(postId).delete();
+    await FirebaseFirestore.instance
+        .collection('community_posts')
+        .doc(postId)
+        .delete();
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Post deleted successfully!')),
     );
@@ -282,11 +287,13 @@ class _CommunityScreenState extends State<CommunityScreen> {
               shrinkWrap: true,
               itemCount: snapshot.data!.docs.length,
               itemBuilder: (context, index) {
-                final comment = snapshot.data!.docs[index].data() as Map<String, dynamic>;
+                final comment =
+                    snapshot.data!.docs[index].data() as Map<String, dynamic>;
                 return ListTile(
                   title: Text(comment['comment']),
                   subtitle: Text(comment['username'] ?? "Anonymous"),
-                  trailing: Text(DateFormat('dd MMM, HH:mm').format(comment['timestamp'].toDate())),
+                  trailing: Text(DateFormat('dd MMM, HH:mm')
+                      .format(comment['timestamp'].toDate())),
                 );
               },
             );

@@ -19,17 +19,6 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 11, 32, 11),
-      appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 218, 227, 219),
-        title: const Text(
-          'Feedback Form',
-          style: TextStyle(fontSize: 25,color: Color.fromARGB(255, 13, 59, 20),),
-        ),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: const Color.fromARGB(255, 17, 17, 17)),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-      ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(20.0),
         child: Form(
@@ -45,12 +34,12 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                   color: Color.fromARGB(255, 224, 237, 224),
                 ),
               ),
-              SizedBox(height: 30
-              ),
+              SizedBox(height: 30),
               TextFormField(
                 decoration: InputDecoration(
                   labelText: 'Name',
-                  prefixIcon: Icon(Icons.person, color: Color.fromARGB(255, 224, 237, 224)),
+                  prefixIcon: Icon(Icons.person,
+                      color: const Color.fromARGB(255, 10, 49, 12)),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -63,7 +52,8 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
               TextFormField(
                 decoration: InputDecoration(
                   labelText: 'Email Address',
-                  prefixIcon: Icon(Icons.email, color: const Color.fromARGB(255, 10, 49, 12)),
+                  prefixIcon: Icon(Icons.email,
+                      color: const Color.fromARGB(255, 10, 49, 12)),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -115,7 +105,8 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                     onPressed: () => Navigator.of(context).pop(),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Color.fromARGB(255, 195, 42, 42),
-                      padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 30, vertical: 15),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -133,7 +124,8 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                     onPressed: _submitForm,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Color.fromARGB(255, 17, 83, 20),
-                      padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 30, vertical: 15),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),

@@ -27,9 +27,10 @@ class OnboardingPage1 extends StatelessWidget {
                 // Improved Image Widget with responsive height
                 Image.asset(
                   'assets/assets/onboarding1.png',
-                  height: MediaQuery.of(context).size.height * 0.4,
+                  height: MediaQuery.of(context).size.height * 0.6,
                 ),
-                const SizedBox(height: 100), // Reduced space between image and button
+                const SizedBox(
+                    height: 80), // Reduced space between image and button
                 // Improved button with rounded corners and shadow
                 ElevatedButton(
                   onPressed: onPressed,
@@ -39,7 +40,8 @@ class OnboardingPage1 extends StatelessWidget {
                     backgroundColor: Color.fromRGBO(10, 49, 12, 1),
                     foregroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30), // Rounded corners
+                      borderRadius:
+                          BorderRadius.circular(30), // Rounded corners
                     ),
                     elevation: 5, // Add shadow for modern effect
                   ),
@@ -48,7 +50,8 @@ class OnboardingPage1 extends StatelessWidget {
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                 ),
-                const SizedBox(height: 250), // Space between button and footer text
+                const SizedBox(
+                    height: 90), // Space between button and footer text
                 // Footer text with subtle font styling
                 const Text(
                   "Powered By JACP Solutions Lanka (pvt) LTD",

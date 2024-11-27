@@ -1,23 +1,32 @@
+import 'package:cassava_healthy_finder/firebase_options.dart';
 import 'package:cassava_healthy_finder/services/firebase_messaging_service.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 import 'screens/OnboardingScreen.dart';
 import 'services/auth_services.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await Firebase.initializeApp(
-    options: const FirebaseOptions(
-      apiKey: "AIzaSyDWToPzQdxj4Aq3iB2Sy4_ZG-FGIto6w50",
-      authDomain: "YOUR_AUTH_DOMAIN",
-      projectId: "cassava-healthy-finder",
-      storageBucket: "cassava-healthy-finder.appspot.com",
-      messagingSenderId: "451811533078",
-      appId: "1:451811533078:android:98b32638e54a5d61287037",
-    ),
+    options: DefaultFirebaseOptions.currentPlatform,
   );
-  await FirebaseMessagingService.initialize();  // Firebase Messaging initialization
+
+  try {
+    await dotenv.load(fileName: 'lib/config/.env');
+    print('Dotenv loaded successfully: ${dotenv.env}');
+  } catch (e) {
+    print('Failed to load .env file: $e');
+  }
+
+  try {
+    await FirebaseMessagingService.initialize();
+  } catch (e) {
+    print('FirebaseMessagingService initialization error: $e');
+  }
+
   runApp(MyApp());
 }
 

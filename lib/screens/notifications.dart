@@ -4,21 +4,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class NotificationsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 11, 32, 11),
-      appBar: AppBar(
-        title: Text(
-          'Notifications',
-          style: TextStyle(
-            color:  Color.fromARGB(255, 9, 44, 11),
-            fontSize: 23,
-          ),
-        ),
-        backgroundColor: Color.fromARGB(255, 222, 228, 223),
-      ),
       body: StreamBuilder(
-        stream: FirebaseFirestore.instance.collection('notifications').orderBy('timestamp', descending: true).snapshots(),
+        stream: FirebaseFirestore.instance
+            .collection('notifications')
+            .orderBy('timestamp', descending: true)
+            .snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (!snapshot.hasData) {
             return Center(
@@ -38,7 +30,8 @@ class NotificationsScreen extends StatelessWidget {
                 color: Color.fromARGB(255, 223, 236, 223),
                 margin: EdgeInsets.all(10),
                 child: Padding(
-                  padding: const EdgeInsets.all(12.0), // Padding inside the card
+                  padding:
+                      const EdgeInsets.all(12.0), // Padding inside the card
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -59,12 +52,15 @@ class NotificationsScreen extends StatelessWidget {
                         ),
                         textAlign: TextAlign.left,
                       ),
-                      SizedBox(height: 10), // Space between body and bottom section
+                      SizedBox(
+                          height: 10), // Space between body and bottom section
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            (notification['timestamp'] as Timestamp).toDate().toString(),
+                            (notification['timestamp'] as Timestamp)
+                                .toDate()
+                                .toString(),
                             style: TextStyle(
                               color: Color.fromARGB(255, 202, 169, 21),
                               fontSize: 12,
@@ -106,7 +102,8 @@ class NotificationsScreen extends StatelessWidget {
             ),
             TextButton(
               onPressed: () {
-                _deleteNotification(notificationId); // Call the function to delete
+                _deleteNotification(
+                    notificationId); // Call the function to delete
                 Navigator.of(context).pop(); // Close the dialog
               },
               child: Text("Delete", style: TextStyle(color: Colors.red)),

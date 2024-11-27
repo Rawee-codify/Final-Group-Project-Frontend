@@ -17,17 +17,7 @@ class ProfileScreen extends StatelessWidget {
     final user = authService.currentUser;
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 196, 201, 196),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        title: const Text('User Profile',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-            )),
-      ),
+      
       body: FutureBuilder<DocumentSnapshot>(
         future:
             FirebaseFirestore.instance.collection('users').doc(user?.uid).get(),
@@ -47,7 +37,7 @@ class ProfileScreen extends StatelessWidget {
                 child: Row(
                   children: [
                     Text(
-                      'Cassava\nHealthy Finder',
+                      'CassavaGuard\n AI',
                       style: TextStyle(color: Colors.white, fontSize: 18),
                     ),
                     Spacer(),
