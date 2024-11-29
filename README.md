@@ -1,7 +1,3 @@
-
-
----
-
 # **Cassava Healthy Finder**  
 
 
@@ -20,8 +16,6 @@
 ---
 
 ## **Introduction**  
-
-
 
 "This app, Cassava Healthy Finder, is a machine learning-powered tool developed using Flutter, designed to help farmers identify common cassava plant diseases such as Cassava Mosaic Disease (CMD) and Cassava Green Mite (CGM). The app provides a user-friendly interface for fast disease detection, helping farmers to take timely actions and improve their crop yield."
 
@@ -138,8 +132,5 @@ MIT License
 If users or developers have any questions, provide contact information for the team or lead developer.
 
 - **Chalani Jayakodi** - prabodhachalani7@gmail.com  
--
+- **Ravindu Dilshan** - ravindudilshanjayasinghe@gmail.com
 
----
-
-This README template gives a professional and clear structure for your project, highlighting team members and providing all necessary details for getting started.
